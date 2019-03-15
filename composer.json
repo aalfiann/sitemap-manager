@@ -1,0 +1,25 @@
+{
+    "name": "aalfiann/sitemap-manager",
+    "description": "A PHP class to manage static sitemap dynamically.",
+    "keywords": ["dynamic","sitemap"],
+    "authors": [
+        {
+            "name": "M ABD AZIZ ALFIAN",
+            "email": "aalfiann@gmail.com",
+            "homepage": "https://github.com/aalfiann",
+            "role": "Developer"
+        }
+    ],
+    "type": "library",
+    "require": {
+        "php": ">=5.4"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "SitemapManager\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
