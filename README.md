@@ -122,7 +122,7 @@ $sm->generate();
 echo $sm->generate(false);
 ```
 
-===
+---
 
 ### Sitemap Urlset
 
