@@ -1,6 +1,6 @@
 # Sitemap Manager
 
-[![Version](https://img.shields.io/badge/dev-1.0.0-red.svg)](https://github.com/aalfiann/sitemap-manager)
+[![Version](https://img.shields.io/badge/stable-1.0.0-green.svg)](https://github.com/aalfiann/sitemap-manager)
 [![Total Downloads](https://poser.pugx.org/aalfiann/sitemap-manager/downloads)](https://packagist.org/packages/aalfiann/sitemap-manager)
 [![License](https://poser.pugx.org/aalfiann/sitemap-manager/license)](https://github.com/aalfiann/sitemap-manager/blob/HEAD/LICENSE.md)
 
@@ -216,3 +216,12 @@ for($i=0;$i<10;$i++){
 }
 $sm->save();
 ```
+
+
+How to Contribute
+-----------------
+### Pull Requests
+
+1. Fork this `sitemap-manager` repository
+2. Create a new branch for each feature or improvement
+3. Send a pull request from each feature branch to the develop branch
