@@ -161,8 +161,8 @@ Note:
  - Make sure you know the limit of the sitemap
  - Enqueue will stop if you reach the limit
 ```php
-$sm->path = 'sitemap-post-[1].xml';
-for ($i=20;$i<30;$i++){
+$sm->path = 'sitemap-post.xml';
+for ($i=0;$i<10;$i++){
     $sm->addBlock('http://yourdomain.com/test-suka-suka-aja-'.$i)
         ->addChangeFreq('monthly')
         ->addLastMod(date('Y-m-d'))
@@ -211,7 +211,7 @@ $sm->delete('http://yourdomain.com/test-suka-suka-aja-7');
 #### Delete many url inside sitemap urlset
 ```php
 $sm->path = 'sitemap-post.xml';
-for($i=20;$i<30;$i++){
+for($i=0;$i<10;$i++){
     $sm->prepareDelete('http://yourdomain.com/test-suka-suka-aja-'.$i)->enqueue();
 }
 $sm->save();
