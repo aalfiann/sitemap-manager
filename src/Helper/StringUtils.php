@@ -1,6 +1,14 @@
 <?php 
 namespace SitemapManager\Helper;
 
+/**
+ * Class StringUtils is the utilities for do the things with string
+ *
+ * @package    SitemapManager/Helper
+ * @author     M ABD AZIZ ALFIAN <github.com/aalfiann>
+ * @copyright  Copyright (c) 2019 M ABD AZIZ ALFIAN
+ * @license    https://github.com/aalfiann/sitemap-manager/blob/master/LICENSE.md MIT License
+ */
 class StringUtils {
     /**
      * First char checker (alternative to preg_match)

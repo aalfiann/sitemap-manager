@@ -2,11 +2,61 @@
 namespace SitemapManager;
 use \SitemapManager\Helper\Filesystem;
 
+/**
+ * Class Sitemap for manage the Urlset of sitemap
+ *
+ * @package    SitemapManager
+ * @author     M ABD AZIZ ALFIAN <github.com/aalfiann>
+ * @copyright  Copyright (c) 2019 M ABD AZIZ ALFIAN
+ * @license    https://github.com/aalfiann/sitemap-manager/blob/master/LICENSE.md MIT License
+ */
 class Sitemap extends SitemapHelper {
 
-    var $path,$sitemapdata,$modifiedblock,$deleteblock,$mode,$block,$enqueue;
-    var $limit='250';
+    /**
+     * Sitemap path
+     */
+    var $path;
 
+    /**
+     * Sitemap data
+     */
+    var $sitemapdata;
+
+    /**
+     * Modified block
+     */
+    var $modifiedblock;
+
+    /**
+     * Delete block (used in queue for delete)
+     */
+    var $deleteblock;
+
+    /**
+     * Mode (used in saving queue for delete)
+     */
+    var $mode;
+
+    /**
+     * Block is temporary data for compare 
+     */
+    var $block;
+
+    /**
+     * Equeue data
+     */
+    var $enqueue;
+
+    /**
+     * Limit for each sitemap file
+     */
+    var $limit='1000';
+
+    /**
+     * Create blank sitemap
+     * 
+     * @return bool
+     */
     public function create(){
         if(!file_exists($this->path)){
             $content = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"></urlset>';
@@ -15,6 +65,13 @@ class Sitemap extends SitemapHelper {
         throw new \Exception(sprintf('File `%s` is already exists!', basename($this->path))); 
     }
 
+    /**
+     * Set block <url> tags inside sitemap
+     * 
+     * @param $url is the url loc
+     * 
+     * @return $this
+     */
     public function setBlock($url){
         $this->block = "";
         $this->modifiedblock = "";
@@ -26,6 +83,13 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Set Change Freq property inside <url>
+     * 
+     * @param $freq is the value of change frequent
+     * 
+     * @return $this
+     */
     public function setChangeFreq($freq){
         if(!empty($this->modifiedblock)){
             $block = $this->modifiedblock;
@@ -42,6 +106,11 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Remove Change Freq property sitemap
+     * 
+     * @return $this
+     */
     public function unsetChangeFreq(){
         if(!empty($this->modifiedblock)){
             $this->modifiedblock = preg_replace('@<changefreq>(.+?)<\/changefreq>@', '', $this->modifiedblock);
@@ -49,6 +118,13 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Set <lastmod> property inside <url>
+     * 
+     * @param $date is the date for last modified
+     * 
+     * @return $this
+     */
     public function setLastMod($date){
         if(!empty($this->modifiedblock)){
             $block = $this->modifiedblock;
@@ -65,6 +141,11 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Remove Last Mod property sitemap
+     * 
+     * @return $this
+     */
     public function unsetLastMod(){
         if(!empty($this->modifiedblock)){
             $this->modifiedblock = preg_replace('@<lastmod>(.+?)<\/lastmod>@', '', $this->modifiedblock);
@@ -72,6 +153,13 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Set Priority property inside <url>
+     * 
+     * @param $priority is the value for priority
+     * 
+     * @return $this
+     */
     public function setPriority($priority){
         if(!empty($this->modifiedblock)){
             $block = $this->modifiedblock;
@@ -88,6 +176,11 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Remove Priority property sitemap
+     * 
+     * @return $this
+     */
     public function unsetPriority(){
         if(!empty($this->modifiedblock)){
             $this->modifiedblock = preg_replace('@<priority>(.+?)<\/priority>@', '', $this->modifiedblock);
@@ -95,6 +188,11 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Execute for update
+     * 
+     * @return bool
+     */
     public function update(){
         $data = $this->getDataSitemap();
         if(!empty($this->block) && !empty($this->modifiedblock)){
@@ -104,11 +202,25 @@ class Sitemap extends SitemapHelper {
         return false;
     }
 
+    /**
+     * Add new block <url> tags inside sitemap
+     * 
+     * @param $url is the url loc
+     * 
+     * @return $this
+     */
     public function addBlock($url){
         if(!$this->has($url)) $this->block = '<url><loc>'.trim($url).'</loc></url>';
         return $this;
     }
 
+    /**
+     * Add new <changefreq> property inside <url> tags
+     * 
+     * @param $freq is the url loc
+     * 
+     * @return $this
+     */
     public function addChangeFreq($freq){
         if(!empty($this->block)){
             $block = $this->block;
@@ -125,6 +237,13 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Add new <lastmod> property inside <url> tags
+     * 
+     * @param $date is the date for last modified
+     * 
+     * @return $this
+     */
     public function addLastMod($date){
         if(!empty($this->block)){
             $block = $this->block;
@@ -141,6 +260,13 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Add new <priority> property inside <url> tags
+     * 
+     * @param $priority is the value for priority
+     * 
+     * @return $this
+     */
     public function addPriority($priority){
         if(!empty($this->block)){
             $block = $this->block;
@@ -157,6 +283,11 @@ class Sitemap extends SitemapHelper {
         return $this;
     }
 
+    /**
+     * Execute for save
+     * 
+     * @return bool
+     */
     public function save(){
         $data = $this->getDataSitemap();
         if($this->mode == 'delete' && is_array($this->enqueue)){
@@ -209,6 +340,13 @@ class Sitemap extends SitemapHelper {
         return false;
     }
 
+    /**
+     * Delete block <url> inside urlset
+     * 
+     * @param $url is the url loc
+     * 
+     * @return bool 
+     */
     public function delete($url){
         if($this->has($url)){
             $data = $this->getDataSitemap();
@@ -221,6 +359,13 @@ class Sitemap extends SitemapHelper {
         return false;
     }
 
+    /**
+     * Prepare item block for queue to delete
+     * 
+     * @param $url is the url loc
+     * 
+     * @return $this
+     */
     public function prepareDelete($url){
         $this->mode = 'delete';
         $data = $this->getDataSitemap();

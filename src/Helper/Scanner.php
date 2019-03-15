@@ -2,6 +2,14 @@
 namespace SitemapManager\Helper;
 use \SitemapManager\Helper\StringUtils;
 
+/**
+ * Class Scanner for scan the file
+ *
+ * @package    SitemapManager/Helper
+ * @author     M ABD AZIZ ALFIAN <github.com/aalfiann>
+ * @copyright  Copyright (c) 2019 M ABD AZIZ ALFIAN
+ * @license    https://github.com/aalfiann/sitemap-manager/blob/master/LICENSE.md MIT License
+ */
 class Scanner {
 
     /**

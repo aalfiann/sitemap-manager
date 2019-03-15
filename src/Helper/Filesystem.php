@@ -3,6 +3,14 @@ namespace SitemapManager\Helper;
 use \SitemapManager\Helper\Scanner;
 use \SitemapManager\Helper\StringUtils;
 
+/**
+ * Class Filesystem for manage the files
+ *
+ * @package    SitemapManager/Helper
+ * @author     M ABD AZIZ ALFIAN <github.com/aalfiann>
+ * @copyright  Copyright (c) 2019 M ABD AZIZ ALFIAN
+ * @license    https://github.com/aalfiann/sitemap-manager/blob/master/LICENSE.md MIT License
+ */
 class Filesystem
 {
 
