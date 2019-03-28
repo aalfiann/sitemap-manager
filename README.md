@@ -1,6 +1,6 @@
 # Sitemap Manager
 
-[![Version](https://img.shields.io/badge/stable-1.0.0-green.svg)](https://github.com/aalfiann/sitemap-manager)
+[![Version](https://img.shields.io/badge/stable-1.1.0-green.svg)](https://github.com/aalfiann/sitemap-manager)
 [![Total Downloads](https://poser.pugx.org/aalfiann/sitemap-manager/downloads)](https://packagist.org/packages/aalfiann/sitemap-manager)
 [![License](https://poser.pugx.org/aalfiann/sitemap-manager/license)](https://github.com/aalfiann/sitemap-manager/blob/HEAD/LICENSE.md)
 
@@ -134,7 +134,7 @@ use \SitemapManager\Sitemap;
 
 $sm = new Sitemap;
 
-// Create blank custom sitemap index
+// Create blank custom sitemap urlset
 $sm->path = 'sitemap-post.xml';
 $sm->create();
 ```

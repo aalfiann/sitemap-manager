@@ -72,10 +72,12 @@ class SitemapHelper {
      * Check if loc already inside of current sitemap
      * 
      * @param $url is the url loc
+     * @param $xml_entities if set to true then will parse url into xml_entities. Default is false
      * 
      * @return bool
      */
-    public function has($url){
+    public function has($url,$xml_entities=false){
+        if($xml_entities) $url = $this->xml_entities($url);
         return StringUtils::isMatchAny('<loc>'.$url.'</loc>',$this->getDataSitemap());
     }
 
@@ -90,6 +92,7 @@ class SitemapHelper {
     public function find($url,$bool=true){
         $dir = dirname($this->path);
         $file = basename($this->path);
+        $url = $this->xml_entities($url);
         if (StringUtils::isMatchAny('-[',$file)){
             $file = preg_replace('@\-\[(.+?)\]@', '*', $file);
         } else {
@@ -192,5 +195,18 @@ class SitemapHelper {
     public function setLimit($value){
         $this->limit = $value;
         return $this;
+    }
+
+    /**
+     * Parsing string into xml entities
+     * 
+     * @param $string is the string value to parse
+     * 
+     * @return string
+     */
+    public function xml_entities($string) {
+        $string = html_entity_decode($string, ENT_QUOTES | ENT_XML1, 'UTF-8');
+        $string = htmlspecialchars($string, ENT_QUOTES | ENT_XML1, 'UTF-8', false);
+        return $string;
     }
 }

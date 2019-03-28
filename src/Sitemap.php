@@ -75,6 +75,7 @@ class Sitemap extends SitemapHelper {
     public function setBlock($url){
         $this->block = "";
         $this->modifiedblock = "";
+        $url = $this->xml_entities($url);
         preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$this->getDataSitemap(),$match);
         if (!empty($match)){
             $this->block = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
@@ -210,6 +211,7 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function addBlock($url){
+        $url = $this->xml_entities($url);
         if(!$this->has($url)) $this->block = '<url><loc>'.trim($url).'</loc></url>';
         return $this;
     }
@@ -348,6 +350,7 @@ class Sitemap extends SitemapHelper {
      * @return bool 
      */
     public function delete($url){
+        $url = $this->xml_entities($url);
         if($this->has($url)){
             $data = $this->getDataSitemap();
             preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$data,$match);
@@ -369,6 +372,7 @@ class Sitemap extends SitemapHelper {
     public function prepareDelete($url){
         $this->mode = 'delete';
         $data = $this->getDataSitemap();
+        $url = $this->xml_entities($url);
         if($this->has($url)){
             preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$data,$match);
             if (!empty($match)){
