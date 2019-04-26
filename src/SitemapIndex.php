@@ -281,41 +281,44 @@ class SitemapIndex extends SitemapHelper {
     /**
      * Generate Sitemap Index automatically
      * 
+     * @param string $url           this is your url website. Ex. https://yourdomain.com [without trailing slash]
+     * @param string|array $dir     you can add another directory of sitemap here. [path without trailing slash]
      * @param bool $write           if you set this to true then will create sitemap.xml, if false will return string
-     * @param string|array $dir     you can add another directory of sitemap here. [path without trailing slash] 
      * 
      * @return mixed    bool/string
      */
-    public function generate($write=true,$dir=''){
-        if(!empty($dir)){
-            $files = Filesystem::getAllFiles('sitemap*.xml');
-            if(is_array($dir)){
-                foreach($dir as $value){
-                    $new = Filesystem::getAllFiles($value.'/'.'sitemap*.xml');
+    public function generate($url,$dir='',$write=true){
+        if(!empty($url)){
+            if(!empty($dir)){
+                $files = Filesystem::getAllFiles('sitemap*.xml');
+                if(is_array($dir)){
+                    foreach($dir as $value){
+                        $new = Filesystem::getAllFiles($value.'/'.'sitemap*.xml');
+                        foreach($new as $val){
+                            $files[] = $val;
+                        }
+                    }
+                } else {
+                    $new = Filesystem::getAllFiles($dir.'/'.'sitemap*.xml');
                     foreach($new as $val){
                         $files[] = $val;
                     }
                 }
             } else {
-                $new = Filesystem::getAllFiles($dir.'/'.'sitemap*.xml');
-                foreach($new as $val){
-                    $files[] = $val;
-                }
+                $files = Filesystem::getAllFiles('sitemap*.xml');
             }
-        } else {
-            $files = Filesystem::getAllFiles('sitemap*.xml');
+            if(($key = array_search('sitemap.xml',$files)) !== false){
+                unset($files[$key]);
+            }
+            $content = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
+            foreach($files as $file){
+                $content .= '<sitemap><loc>'.$url.'/'.$file.'</loc></sitemap>';
+            }
+            $content .= '</sitemapindex>';
+            if($write){
+                return Filesystem::write('sitemap.xml',$content);
+            }
         }
-        if(($key = array_search('sitemap.xml',$files)) !== false){
-            unset($files[$key]);
-        }
-        $content = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">';
-        foreach($files as $file){
-            $content .= '<sitemap><loc>'.$file.'</loc></sitemap>';
-        }
-        $content .= '</sitemapindex>';
-        if($write){
-            return Filesystem::write('sitemap.xml',$content);
-        } 
         return $content;
     }
     
