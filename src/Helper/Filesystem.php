@@ -49,6 +49,9 @@ class Filesystem
      */
     public static function write($path, $contents)
     {
+        // auto create directory when not exists
+        if(!file_exists(dirname($path))) mkdir(dirname($path), 0777, true);
+
         $fp = fopen($path, 'w+');
 
         if(!flock($fp, LOCK_EX))
@@ -140,7 +143,7 @@ class Filesystem
             }
             return $result;    
         }
-        return $dir.DIRECTORY_SEPARATOR.$path;
+        return $dir.DIRECTORY_SEPARATOR.$file;
     }
 
     /**
@@ -157,7 +160,7 @@ class Filesystem
         if(is_file($path))
         {
             if($file == 'sitemap.xml'){
-                return $dir.DIRECTORY_SEPARATOR.$path;
+                return $file;
             }
             $lfile = $file;
             if (StringUtils::isMatchAny('-[',$lfile)){
@@ -165,7 +168,7 @@ class Filesystem
             } else {
                 $lfile = str_replace('.xml', '*.xml', $lfile);
             }
-            $lfiles = self::getAllFiles($lfile);
+            $lfiles = self::getAllFiles($dir.DIRECTORY_SEPARATOR.$lfile);
             if(count($lfiles)>1){
                 $file = preg_replace('@\-\[(.+?)\]@', '', $file);
                 $file1 = explode('.',$file);
@@ -186,7 +189,7 @@ class Filesystem
                 return $result; 
             }
         }
-        return $dir.DIRECTORY_SEPARATOR.$path;
+        return $dir.DIRECTORY_SEPARATOR.$file;
     }
 
 
@@ -199,7 +202,7 @@ class Filesystem
      * @param $path         is the full path filename with wildcard
      * @param $recursive    if set to true then will search into sub folder. Default is false.
      *
-     * @return array    An array, item is a file
+     * @return array        An array, item is a file
      */
     public static function getAllFiles($path = '',$recursive=false)
     {

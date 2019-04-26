@@ -73,13 +73,15 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function setBlock($url){
-        $this->block = "";
-        $this->modifiedblock = "";
-        $url = $this->xml_entities($url);
-        preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$this->getDataSitemap(),$match);
-        if (!empty($match)){
-            $this->block = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
-            $this->modifiedblock = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
+        if(!empty($url)){
+            $this->block = "";
+            $this->modifiedblock = "";
+            $url = $this->xml_entities($url);
+            preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$this->getDataSitemap(),$match);
+            if (!empty($match)){
+                $this->block = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
+                $this->modifiedblock = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
+            }
         }
         return $this;
     }
@@ -92,16 +94,18 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function setChangeFreq($freq){
-        if(!empty($this->modifiedblock)){
-            $block = $this->modifiedblock;
-            $temp = explode('<changefreq>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</changefreq>',$temp[1]);
-                $block = str_replace('<changefreq>'.$temp1[0].'</changefreq>','<changefreq>'.$freq.'</changefreq>',$block);
-                $this->modifiedblock = $block;
-            } else {
-                $block = str_replace(['<url>','</url>'],'',$block);
-                $this->modifiedblock = '<url>'.$block.'<changefreq>'.$freq.'</changefreq></url>';
+        if(!empty($freq)){
+            if(!empty($this->modifiedblock)){
+                $block = $this->modifiedblock;
+                $temp = explode('<changefreq>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</changefreq>',$temp[1]);
+                    $block = str_replace('<changefreq>'.$temp1[0].'</changefreq>','<changefreq>'.$freq.'</changefreq>',$block);
+                    $this->modifiedblock = $block;
+                } else {
+                    $block = str_replace(['<url>','</url>'],'',$block);
+                    $this->modifiedblock = '<url>'.$block.'<changefreq>'.$freq.'</changefreq></url>';
+                }
             }
         }
         return $this;
@@ -127,16 +131,18 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function setLastMod($date){
-        if(!empty($this->modifiedblock)){
-            $block = $this->modifiedblock;
-            $temp = explode('<lastmod>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</lastmod>',$temp[1]);
-                $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
-                $this->modifiedblock = $block;
-            } else {
-                $block = str_replace(['<url>','</url>'],'',$block);
-                $this->modifiedblock = '<url>'.$block.'<lastmod>'.$date.'</lastmod></url>';
+        if(!empty($date)){
+            if(!empty($this->modifiedblock)){
+                $block = $this->modifiedblock;
+                $temp = explode('<lastmod>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</lastmod>',$temp[1]);
+                    $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
+                    $this->modifiedblock = $block;
+                } else {
+                    $block = str_replace(['<url>','</url>'],'',$block);
+                    $this->modifiedblock = '<url>'.$block.'<lastmod>'.$date.'</lastmod></url>';
+                }
             }
         }
         return $this;
@@ -162,16 +168,18 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function setPriority($priority){
-        if(!empty($this->modifiedblock)){
-            $block = $this->modifiedblock;
-            $temp = explode('<priority>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</priority>',$temp[1]);
-                $block = str_replace('<priority>'.$temp1[0].'</priority>','<priority>'.$priority.'</priority>',$block);
-                $this->modifiedblock = $block;
-            } else {
-                $block = str_replace(['<url>','</url>'],'',$block);
-                $this->modifiedblock = '<url>'.$block.'<priority>'.$priority.'</priority></url>';
+        if(!empty($priority)){
+            if(!empty($this->modifiedblock)){
+                $block = $this->modifiedblock;
+                $temp = explode('<priority>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</priority>',$temp[1]);
+                    $block = str_replace('<priority>'.$temp1[0].'</priority>','<priority>'.$priority.'</priority>',$block);
+                    $this->modifiedblock = $block;
+                } else {
+                    $block = str_replace(['<url>','</url>'],'',$block);
+                    $this->modifiedblock = '<url>'.$block.'<priority>'.$priority.'</priority></url>';
+                }
             }
         }
         return $this;
@@ -211,8 +219,10 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function addBlock($url){
-        $url = $this->xml_entities($url);
-        if(!$this->has($url)) $this->block = '<url><loc>'.trim($url).'</loc></url>';
+        if(!empty($url)){
+            $url = $this->xml_entities($url);
+            if(!$this->has($url)) $this->block = '<url><loc>'.trim($url).'</loc></url>';
+        }
         return $this;
     }
 
@@ -224,16 +234,18 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function addChangeFreq($freq){
-        if(!empty($this->block)){
-            $block = $this->block;
-            $temp = explode('<changefreq>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</changefreq>',$temp[1]);
-                $block = str_replace('<changefreq>'.$temp1[0].'</changefreq>','<changefreq>'.$freq.'</changefreq>',$block);
-                $this->block = $block;
-            } else {
-                $block = str_replace(['<url>','</url>'],'',$block);
-                $this->block = '<url>'.$block.'<changefreq>'.$freq.'</changefreq></url>';
+        if(!empty($freq)){
+            if(!empty($this->block)){
+                $block = $this->block;
+                $temp = explode('<changefreq>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</changefreq>',$temp[1]);
+                    $block = str_replace('<changefreq>'.$temp1[0].'</changefreq>','<changefreq>'.$freq.'</changefreq>',$block);
+                    $this->block = $block;
+                } else {
+                    $block = str_replace(['<url>','</url>'],'',$block);
+                    $this->block = '<url>'.$block.'<changefreq>'.$freq.'</changefreq></url>';
+                }
             }
         }
         return $this;
@@ -247,16 +259,18 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function addLastMod($date){
-        if(!empty($this->block)){
-            $block = $this->block;
-            $temp = explode('<lastmod>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</lastmod>',$temp[1]);
-                $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
-                $this->block = $block;
-            } else {
-                $block = str_replace(['<url>','</url>'],'',$block);
-                $this->block = '<url>'.$block.'<lastmod>'.$date.'</lastmod></url>';
+        if(!empty($date)){
+            if(!empty($this->block)){
+                $block = $this->block;
+                $temp = explode('<lastmod>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</lastmod>',$temp[1]);
+                    $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
+                    $this->block = $block;
+                } else {
+                    $block = str_replace(['<url>','</url>'],'',$block);
+                    $this->block = '<url>'.$block.'<lastmod>'.$date.'</lastmod></url>';
+                }
             }
         }
         return $this;
@@ -270,16 +284,18 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function addPriority($priority){
-        if(!empty($this->block)){
-            $block = $this->block;
-            $temp = explode('<priority>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</priority>',$temp[1]);
-                $block = str_replace('<priority>'.$temp1[0].'</priority>','<priority>'.$priority.'</priority>',$block);
-                $this->block = $block;
-            } else {
-                $block = str_replace(['<url>','</url>'],'',$block);
-                $this->block = '<url>'.$block.'<priority>'.$priority.'</priority></url>';
+        if(!empty($priority)){
+            if(!empty($this->block)){
+                $block = $this->block;
+                $temp = explode('<priority>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</priority>',$temp[1]);
+                    $block = str_replace('<priority>'.$temp1[0].'</priority>','<priority>'.$priority.'</priority>',$block);
+                    $this->block = $block;
+                } else {
+                    $block = str_replace(['<url>','</url>'],'',$block);
+                    $this->block = '<url>'.$block.'<priority>'.$priority.'</priority></url>';
+                }
             }
         }
         return $this;
@@ -350,13 +366,15 @@ class Sitemap extends SitemapHelper {
      * @return bool 
      */
     public function delete($url){
-        $url = $this->xml_entities($url);
-        if($this->has($url)){
-            $data = $this->getDataSitemap();
-            preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$data,$match);
-            if (!empty($match)){
-                $data = str_replace('<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>','',$data);
-                return Filesystem::write($this->path,$data);
+        if(!empty($url)){
+            $url = $this->xml_entities($url);
+            if($this->has($url)){
+                $data = $this->getDataSitemap();
+                preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$data,$match);
+                if (!empty($match)){
+                    $data = str_replace('<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>','',$data);
+                    return Filesystem::write($this->path,$data);
+                }
             }
         }
         return false;
@@ -370,13 +388,15 @@ class Sitemap extends SitemapHelper {
      * @return $this
      */
     public function prepareDelete($url){
-        $this->mode = 'delete';
-        $data = $this->getDataSitemap();
-        $url = $this->xml_entities($url);
-        if($this->has($url)){
-            preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$data,$match);
-            if (!empty($match)){
-                $this->deleteblock = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
+        if(!empty($url)){
+            $this->mode = 'delete';
+            $data = $this->getDataSitemap();
+            $url = $this->xml_entities($url);
+            if($this->has($url)){
+                preg_match('~<url><loc>'.trim($url).'</loc>(.*)</url>~Uis',$data,$match);
+                if (!empty($match)){
+                    $this->deleteblock = '<url><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</url>';
+                }
             }
         }
         return $this;

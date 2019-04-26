@@ -1,6 +1,6 @@
 # Sitemap Manager
 
-[![Version](https://img.shields.io/badge/stable-1.1.1-green.svg)](https://github.com/aalfiann/sitemap-manager)
+[![Version](https://img.shields.io/badge/stable-1.2.0-green.svg)](https://github.com/aalfiann/sitemap-manager)
 [![Total Downloads](https://poser.pugx.org/aalfiann/sitemap-manager/downloads)](https://packagist.org/packages/aalfiann/sitemap-manager)
 [![License](https://poser.pugx.org/aalfiann/sitemap-manager/license)](https://github.com/aalfiann/sitemap-manager/blob/HEAD/LICENSE.md)
 
@@ -117,6 +117,9 @@ $sm->deleteFile();
 // Generate All sitemap index into file sitemap.xml
 // Note: You need a cronjob to make this refreshed automatically
 $sm->generate();
+
+// Generate All sitemap include sub directories (path without trailing slash)
+$sm->generate(true,['sitemap-folder-1','sitemap/folder-2']);
 
 // Generate All sitemap index into string
 echo $sm->generate(false);

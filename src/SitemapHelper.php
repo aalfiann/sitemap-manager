@@ -90,25 +90,27 @@ class SitemapHelper {
      * @return mixed    bool/string
      */
     public function find($url,$bool=true){
-        $dir = dirname($this->path);
-        $file = basename($this->path);
-        $url = $this->xml_entities($url);
-        if (StringUtils::isMatchAny('-[',$file)){
-            $file = preg_replace('@\-\[(.+?)\]@', '*', $file);
-        } else {
-            $file = str_replace('.xml', '*.xml', $file);
-        }
-        $newpath = $dir.DIRECTORY_SEPARATOR.$file;
-        $files = Filesystem::getAllFiles($newpath);
-        foreach($files as $sitemap){
-            $sitemapdata = Filesystem::read($sitemap);
-            $temp = explode('">',$sitemapdata);
-            if(!empty($temp[1])) {
-                $temp[1] = preg_replace('/\s+/', '', $temp[1]);
-                $sitemapdata = $temp[0].'">'.$temp[1];
+        if(!empty($url)){
+            $dir = dirname($this->path);
+            $file = basename($this->path);
+            $url = $this->xml_entities($url);
+            if (StringUtils::isMatchAny('-[',$file)){
+                $file = preg_replace('@\-\[(.+?)\]@', '*', $file);
+            } else {
+                $file = str_replace('.xml', '*.xml', $file);
             }
-            if(StringUtils::isMatchAny('<loc>'.$url.'</loc>',$sitemapdata)){
-                return ($bool?true:$sitemap);
+            $newpath = $dir.DIRECTORY_SEPARATOR.$file;
+            $files = Filesystem::getAllFiles($newpath);
+            foreach($files as $sitemap){
+                $sitemapdata = Filesystem::read($sitemap);
+                $temp = explode('">',$sitemapdata);
+                if(!empty($temp[1])) {
+                    $temp[1] = preg_replace('/\s+/', '', $temp[1]);
+                    $sitemapdata = $temp[0].'">'.$temp[1];
+                }
+                if(StringUtils::isMatchAny('<loc>'.$url.'</loc>',$sitemapdata)){
+                    return ($bool?true:$sitemap);
+                }
             }
         }
         return ($bool?false:'');
@@ -205,8 +207,10 @@ class SitemapHelper {
      * @return string
      */
     public function xml_entities($string) {
-        $string = html_entity_decode($string, ENT_QUOTES | ENT_XML1, 'UTF-8');
-        $string = htmlspecialchars($string, ENT_QUOTES | ENT_XML1, 'UTF-8', false);
+        if(!empty($string)){
+            $string = html_entity_decode($string, ENT_QUOTES | ENT_XML1, 'UTF-8');
+            $string = htmlspecialchars($string, ENT_QUOTES | ENT_XML1, 'UTF-8', false);
+        }
         return $string;
     }
     

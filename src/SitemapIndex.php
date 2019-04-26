@@ -73,13 +73,15 @@ class SitemapIndex extends SitemapHelper {
      * @return $this
      */
     public function setBlock($url){
-        $this->block = "";
-        $this->modifiedblock = "";
-        $url = $this->xml_entities($url);
-        preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$this->getDataSitemap(),$match);
-        if (!empty($match)){
-            $this->block = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
-            $this->modifiedblock = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+        if(!empty($url)){
+            $this->block = "";
+            $this->modifiedblock = "";
+            $url = $this->xml_entities($url);
+            preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$this->getDataSitemap(),$match);
+            if (!empty($match)){
+                $this->block = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+                $this->modifiedblock = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+            }
         }
         return $this;
     }
@@ -92,16 +94,18 @@ class SitemapIndex extends SitemapHelper {
      * @return $this
      */
     public function setLastMod($date){
-        if(!empty($this->modifiedblock)){
-            $block = $this->modifiedblock;
-            $temp = explode('<lastmod>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</lastmod>',$temp[1]);
-                $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
-                $this->modifiedblock = $block;
-            } else {
-                $block = str_replace(['<sitemap>','</sitemap>'],'',$block);
-                $this->modifiedblock = '<sitemap>'.$block.'<lastmod>'.$date.'</lastmod></sitemap>';
+        if(!empty($date)){
+            if(!empty($this->modifiedblock)){
+                $block = $this->modifiedblock;
+                $temp = explode('<lastmod>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</lastmod>',$temp[1]);
+                    $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
+                    $this->modifiedblock = $block;
+                } else {
+                    $block = str_replace(['<sitemap>','</sitemap>'],'',$block);
+                    $this->modifiedblock = '<sitemap>'.$block.'<lastmod>'.$date.'</lastmod></sitemap>';
+                }
             }
         }
         return $this;
@@ -141,8 +145,10 @@ class SitemapIndex extends SitemapHelper {
      * @return $this
      */
     public function addBlock($url){
-        $url = $this->xml_entities($url);
-        if(!$this->has($url)) $this->block = '<sitemap><loc>'.trim($url).'</loc></sitemap>';
+        if(!empty($url)){
+            $url = $this->xml_entities($url);
+            if(!$this->has($url)) $this->block = '<sitemap><loc>'.trim($url).'</loc></sitemap>';
+        }
         return $this;
     }
 
@@ -154,16 +160,18 @@ class SitemapIndex extends SitemapHelper {
      * @return $this
      */
     public function addLastMod($date){
-        if(!empty($this->block)){
-            $block = $this->block;
-            $temp = explode('<lastmod>',$block);
-            if(!empty($temp[1])){
-                $temp1 = explode('</lastmod>',$temp[1]);
-                $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
-                $this->block = $block;
-            } else {
-                $block = str_replace(['<sitemap>','</sitemap>'],'',$block);
-                $this->block = '<sitemap>'.$block.'<lastmod>'.$date.'</lastmod></sitemap>';
+        if(!empty($date)){
+            if(!empty($this->block)){
+                $block = $this->block;
+                $temp = explode('<lastmod>',$block);
+                if(!empty($temp[1])){
+                    $temp1 = explode('</lastmod>',$temp[1]);
+                    $block = str_replace('<lastmod>'.$temp1[0].'</lastmod>','<lastmod>'.$date.'</lastmod>',$block);
+                    $this->block = $block;
+                } else {
+                    $block = str_replace(['<sitemap>','</sitemap>'],'',$block);
+                    $this->block = '<sitemap>'.$block.'<lastmod>'.$date.'</lastmod></sitemap>';
+                }
             }
         }
         return $this;
@@ -234,13 +242,15 @@ class SitemapIndex extends SitemapHelper {
      * @return bool 
      */
     public function delete($url){
-        $url = $this->xml_entities($url);
-        if($this->has($url)){
-            $data = $this->getDataSitemap();
-            preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$data,$match);
-            if (!empty($match)){
-                $data = str_replace('<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>','',$data);
-                return Filesystem::write($this->path,$data);
+        if(!empty($url)){
+            $url = $this->xml_entities($url);
+            if($this->has($url)){
+                $data = $this->getDataSitemap();
+                preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$data,$match);
+                if (!empty($match)){
+                    $data = str_replace('<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>','',$data);
+                    return Filesystem::write($this->path,$data);
+                }
             }
         }
         return false;
@@ -254,13 +264,15 @@ class SitemapIndex extends SitemapHelper {
      * @return $this
      */
     public function prepareDelete($url){
-        $this->mode = 'delete';
-        $data = $this->getDataSitemap();
-        $url = $this->xml_entities($url);
-        if($this->has($url)){
-            preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$data,$match);
-            if (!empty($match)){
-                $this->deleteblock = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+        if(!empty($url)){
+            $this->mode = 'delete';
+            $data = $this->getDataSitemap();
+            $url = $this->xml_entities($url);
+            if($this->has($url)){
+                preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$data,$match);
+                if (!empty($match)){
+                    $this->deleteblock = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+                }
             }
         }
         return $this;
@@ -269,12 +281,30 @@ class SitemapIndex extends SitemapHelper {
     /**
      * Generate Sitemap Index automatically
      * 
-     * @param $write    if you set this to true then will create sitemap.xml, if false will return string
+     * @param bool $write           if you set this to true then will create sitemap.xml, if false will return string
+     * @param string|array $dir     you can add another directory of sitemap here. [path without trailing slash] 
      * 
      * @return mixed    bool/string
      */
-    public function generate($write=true){
-        $files = Filesystem::getAllFiles('sitemap*.xml');
+    public function generate($write=true,$dir=''){
+        if(!empty($dir)){
+            $files = Filesystem::getAllFiles('sitemap*.xml');
+            if(is_array($dir)){
+                foreach($dir as $value){
+                    $new = Filesystem::getAllFiles($value.'/'.'sitemap*.xml');
+                    foreach($new as $val){
+                        $files[] = $val;
+                    }
+                }
+            } else {
+                $new = Filesystem::getAllFiles($dir.'/'.'sitemap*.xml');
+                foreach($new as $val){
+                    $files[] = $val;
+                }
+            }
+        } else {
+            $files = Filesystem::getAllFiles('sitemap*.xml');
+        }
         if(($key = array_search('sitemap.xml',$files)) !== false){
             unset($files[$key]);
         }
