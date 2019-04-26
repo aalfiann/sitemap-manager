@@ -48,4 +48,5 @@ class StringUtils {
         if (substr($string, (-1 * abs(strlen($match)))) == $match) return true;
         return false;
     }
+
 }

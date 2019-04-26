@@ -288,4 +288,5 @@ class SitemapIndex extends SitemapHelper {
         } 
         return $content;
     }
+    
 }

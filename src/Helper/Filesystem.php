@@ -146,7 +146,7 @@ class Filesystem
     /**
      * Last increment filename
      * 
-     * @param string $path  is the path of filename
+     * @param string $path  is the path of filename 
      * 
      * @return string       new/old path 
      */
@@ -196,23 +196,17 @@ class Filesystem
     /**
      * Get an array containing the path of all files in this repository
      * 
-     * @param $path     is the full path filename with wildcard
+     * @param $path         is the full path filename with wildcard
+     * @param $recursive    if set to true then will search into sub folder. Default is false.
      *
      * @return array    An array, item is a file
      */
-    public static function getAllFiles($path = '')
+    public static function getAllFiles($path = '',$recursive=false)
     {
-        $files = [];
-        $_files = Scanner::recursiveGlob($path);
-        foreach($_files as $file)
-        {
-            $files[] = $file;
+        if($recursive) {
+            return Scanner::recursiveGlob($path);
         }
-
-        return $files;
+        return glob($path); 
     }
-
-
-    //--------------------------------------------------------------------
 
 }

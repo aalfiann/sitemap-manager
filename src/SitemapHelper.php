@@ -209,4 +209,5 @@ class SitemapHelper {
         $string = htmlspecialchars($string, ENT_QUOTES | ENT_XML1, 'UTF-8', false);
         return $string;
     }
+    
 }

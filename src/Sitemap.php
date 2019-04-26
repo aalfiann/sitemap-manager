@@ -381,4 +381,5 @@ class Sitemap extends SitemapHelper {
         }
         return $this;
     }
+    
 }
