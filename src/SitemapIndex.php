@@ -77,10 +77,10 @@ class SitemapIndex extends SitemapHelper {
             $this->block = "";
             $this->modifiedblock = "";
             $url = $this->xml_entities($url);
-            preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$this->getDataSitemap(),$match);
+            preg_match('~<sitemap><loc>'.$url.'</loc>(.*)</sitemap>~Uis',$this->getDataSitemap(),$match);
             if (!empty($match)){
-                $this->block = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
-                $this->modifiedblock = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+                $this->block = '<sitemap><loc>'.$url.'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+                $this->modifiedblock = '<sitemap><loc>'.$url.'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
             }
         }
         return $this;
@@ -147,7 +147,7 @@ class SitemapIndex extends SitemapHelper {
     public function addBlock($url){
         if(!empty($url)){
             $url = $this->xml_entities($url);
-            if(!$this->has($url)) $this->block = '<sitemap><loc>'.trim($url).'</loc></sitemap>';
+            if(!$this->has($url)) $this->block = '<sitemap><loc>'.$url.'</loc></sitemap>';
         }
         return $this;
     }
@@ -246,9 +246,9 @@ class SitemapIndex extends SitemapHelper {
             $url = $this->xml_entities($url);
             if($this->has($url)){
                 $data = $this->getDataSitemap();
-                preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$data,$match);
+                preg_match('~<sitemap><loc>'.$url.'</loc>(.*)</sitemap>~Uis',$data,$match);
                 if (!empty($match)){
-                    $data = str_replace('<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>','',$data);
+                    $data = str_replace('<sitemap><loc>'.$url.'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>','',$data);
                     return Filesystem::write($this->path,$data);
                 }
             }
@@ -269,9 +269,9 @@ class SitemapIndex extends SitemapHelper {
             $data = $this->getDataSitemap();
             $url = $this->xml_entities($url);
             if($this->has($url)){
-                preg_match('~<sitemap><loc>'.trim($url).'</loc>(.*)</sitemap>~Uis',$data,$match);
+                preg_match('~<sitemap><loc>'.$url.'</loc>(.*)</sitemap>~Uis',$data,$match);
                 if (!empty($match)){
-                    $this->deleteblock = '<sitemap><loc>'.trim($url).'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
+                    $this->deleteblock = '<sitemap><loc>'.$url.'</loc>'.(!empty($match[1])?trim($match[1]):'').'</sitemap>';
                 }
             }
         }

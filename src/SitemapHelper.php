@@ -208,6 +208,7 @@ class SitemapHelper {
      */
     public function xml_entities($string) {
         if(!empty($string)){
+            $string = trim($string);
             $string = html_entity_decode($string, ENT_QUOTES | ENT_XML1, 'UTF-8');
             $string = htmlspecialchars($string, ENT_QUOTES | ENT_XML1, 'UTF-8', false);
         }

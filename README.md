@@ -1,6 +1,6 @@
 # Sitemap Manager
 
-[![Version](https://img.shields.io/badge/stable-1.3.0-green.svg)](https://github.com/aalfiann/sitemap-manager)
+[![Version](https://img.shields.io/badge/stable-1.3.1-green.svg)](https://github.com/aalfiann/sitemap-manager)
 [![Total Downloads](https://poser.pugx.org/aalfiann/sitemap-manager/downloads)](https://packagist.org/packages/aalfiann/sitemap-manager)
 [![License](https://poser.pugx.org/aalfiann/sitemap-manager/license)](https://github.com/aalfiann/sitemap-manager/blob/HEAD/LICENSE.md)
 
